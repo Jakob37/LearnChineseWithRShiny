@@ -13,36 +13,37 @@ library(shiny)
 ui <- fluidPage(
     
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    titlePanel("Learn chinese characters - with RShiny"),
     
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30),
+            # sliderInput("bins",
+            #             "Number of bins:",
+            #             min = 1,
+            #             max = 50,
+            #             value = 30),
+            # 
+            # sliderInput("bins",
+            #             "Number of bins:",
+            #             min = 1,
+            #             max = 50,
+            #             value = 30),
             
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30),
-            
-            actionButton("iterate", "Click me"),
+            # actionButton("iterate", "Click me"),
             # actionButton("iterate2", "Click me 2"),
             # actionButton("iterate3", "Click me 3"),
-            uiOutput("my_button"),
+            # uiOutput("my_button"),
             
             textInput("pinying", "Enter pinying"),
             textInput("english", "Enter english"),
-            actionButton("enter", "Enter")
+            actionButton("iterate", "Enter")
         ),
         
         # Show a plot of the generated distribution
         mainPanel(
             htmlOutput("text"),
+            htmlOutput("statistics"),
             plotOutput("distPlot")
         )
     )
@@ -53,6 +54,11 @@ server <- function(input, output) {
     
     text_list <- c("a", "b", "c", "d", "e")
     cur_ind <- 1
+    
+    correct <- 0
+    correct_pinying <- 0
+    correct_english <- 0
+    total <- 0
     
     dict <- list()
     dict[[1]] <- c("一", "yi1", "one")
@@ -70,16 +76,21 @@ server <- function(input, output) {
         actionButton("iterate", label=paste("text -", cur_ind))
     })
     
-    output$distPlot <- renderPlot({
-        x    <- faithful[, 2] 
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-    })
+    # output$distPlot <- renderPlot({
+    #     x    <- faithful[, 2] 
+    #     bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    #     hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    # })
     
+    ## Setup
     output$text <- renderText({paste0('<div style="font-size:200px;">', dict[[cur_ind]][1], '</div>')})
-    
-        
+
+    ## Methods
     observeEvent(input$iterate, {
+        
+        total <<- total + 1
+        
+        
         
         print("Observed!")
         cur_ind <<- cur_ind + 1
@@ -91,32 +102,16 @@ server <- function(input, output) {
         output$my_button <- renderUI({
             actionButton("iterate", label=paste("text -", cur_ind))
         })
-    })
-    
-    
-    
-    observeEvent(input$iterate2, {
-        print("Observed!")
-        cur_ind <<- cur_ind + 1
-        cur_ind <- (cur_ind - 1) %% length(text_list) + 1
-        print(cur_ind)
-        output$text <- renderText({paste("Current letter: 2")})
-    })
-    
-    observeEvent(input$iterate3, {
-        print("Observed!")
-        cur_ind <<- cur_ind + 1
-        cur_ind <- (cur_ind - 1) %% length(text_list) + 1
-        print(cur_ind)
-        output$text <- renderText({paste("Current letter: 3")})
-    })
-    
-    observeEvent(input$iterate4, {
-        print("Observed!")
-        cur_ind <<- cur_ind + 1
-        cur_ind <- (cur_ind - 1) %% length(text_list) + 1
-        print(cur_ind)
-        output$text <- renderText({paste("Current letter: 4")})
+        
+        output$statistics <- renderText({
+            paste(
+                'Correct: ', correct, 
+                '<br>Correct Pinying: ', correct_pinying, 
+                '<br>Correct English: ', correct_english,
+                '<br>Total: ', total)
+        })
+        
+        
     })
 }
 
