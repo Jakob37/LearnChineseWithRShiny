@@ -31,17 +31,19 @@ ui <- fluidPage(
                         value = 30),
             
             actionButton("iterate", "Click me"),
-            actionButton("iterate2", "Click me 2"),
-            actionButton("iterate3", "Click me 3"),
+            # actionButton("iterate2", "Click me 2"),
+            # actionButton("iterate3", "Click me 3"),
             uiOutput("my_button"),
+            
             textInput("pinying", "Enter pinying"),
-            textInput("english", "Enter english")
+            textInput("english", "Enter english"),
+            actionButton("enter", "Enter")
         ),
         
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("distPlot"),
-            htmlOutput("text")
+            htmlOutput("text"),
+            plotOutput("distPlot")
         )
     )
 )
@@ -74,21 +76,18 @@ server <- function(input, output) {
         hist(x, breaks = bins, col = 'darkgray', border = 'white')
     })
     
-    # output$text <- renderText({paste("Current letter: ", dict[[cur_ind]][1])})
-    # output$text <- renderText({paste0("<font size=100>", dict[[cur_ind]][1], "</font>")})
-    # output$text <- renderText({ paste("hello input is","<font color=\"#FF0000\"><b>", "test", "</b></font>") })
+    output$text <- renderText({paste0('<div style="font-size:200px;">', dict[[cur_ind]][1], '</div>')})
     
+        
     observeEvent(input$iterate, {
+        
         print("Observed!")
         cur_ind <<- cur_ind + 1
         cur_ind <- (cur_ind - 1) %% length(dict) + 1
         print(cur_ind)
-        # output$text()
         
-        output$text <- renderText({paste0("<font size=100>", dict[[cur_ind]][1], "</font>")})
-        # output$text <- renderText({
-        #     paste("Current letter: ", dict[[cur_ind]][1])})
-        
+        output$text <- renderText({paste0('<div style="font-size:200px;">', dict[[cur_ind]][1], '</div>')})
+
         output$my_button <- renderUI({
             actionButton("iterate", label=paste("text -", cur_ind))
         })
