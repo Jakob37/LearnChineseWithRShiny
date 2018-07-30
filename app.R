@@ -33,14 +33,15 @@ ui <- fluidPage(
             actionButton("iterate", "Click me"),
             actionButton("iterate2", "Click me 2"),
             actionButton("iterate3", "Click me 3"),
-            uiOutput("my_button")
-            
+            uiOutput("my_button"),
+            textInput("pinying", "Enter pinying"),
+            textInput("english", "Enter english")
         ),
         
         # Show a plot of the generated distribution
         mainPanel(
             plotOutput("distPlot"),
-            textOutput("text")
+            htmlOutput("text")
         )
     )
 )
@@ -51,44 +52,56 @@ server <- function(input, output) {
     text_list <- c("a", "b", "c", "d", "e")
     cur_ind <- 1
     
+    dict <- list()
+    dict[[1]] <- c("一", "yi1", "one")
+    dict[[2]] <- c("丨", "gun3", "line")
+    dict[[3]] <- c("丶", "zhu3", "dot")
+    dict[[4]] <- c("丿	乀", "fu2", "slash")
+    dict[[5]] <- c("乙	乚", "yin3", "second")
+    dict[[6]] <- c("亅", "jue2", "hook")
+    dict[[7]] <- c("二", "er4", "two")
+    dict[[8]] <- c("亠", "tou2", "lid")
+    dict[[9]] <- c("人	亻", "ren2", "man")
+    dict[[10]] <- c("儿", "er2", "legs")
+
     output$my_button <- renderUI({
         actionButton("iterate", label=paste("text -", cur_ind))
     })
     
     output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
         x    <- faithful[, 2] 
         bins <- seq(min(x), max(x), length.out = input$bins + 1)
-        
-        # draw the histogram with the specified number of bins
         hist(x, breaks = bins, col = 'darkgray', border = 'white')
     })
     
-    output$text <- renderText({paste("Current letter: ", text_list[cur_ind])})
+    # output$text <- renderText({paste("Current letter: ", dict[[cur_ind]][1])})
+    # output$text <- renderText({paste0("<font size=100>", dict[[cur_ind]][1], "</font>")})
+    # output$text <- renderText({ paste("hello input is","<font color=\"#FF0000\"><b>", "test", "</b></font>") })
     
     observeEvent(input$iterate, {
         print("Observed!")
         cur_ind <<- cur_ind + 1
-        cur_ind <- (cur_ind - 1) %% length(text_list) + 1
+        cur_ind <- (cur_ind - 1) %% length(dict) + 1
         print(cur_ind)
         # output$text()
         
-        output$text <- renderText({paste("Current letter: ", text_list[cur_ind])})
+        output$text <- renderText({paste0("<font size=100>", dict[[cur_ind]][1], "</font>")})
+        # output$text <- renderText({
+        #     paste("Current letter: ", dict[[cur_ind]][1])})
         
         output$my_button <- renderUI({
             actionButton("iterate", label=paste("text -", cur_ind))
         })
     })
     
+    
+    
     observeEvent(input$iterate2, {
         print("Observed!")
         cur_ind <<- cur_ind + 1
         cur_ind <- (cur_ind - 1) %% length(text_list) + 1
         print(cur_ind)
-        # output$text()
-        
         output$text <- renderText({paste("Current letter: 2")})
-        
     })
     
     observeEvent(input$iterate3, {
@@ -96,10 +109,7 @@ server <- function(input, output) {
         cur_ind <<- cur_ind + 1
         cur_ind <- (cur_ind - 1) %% length(text_list) + 1
         print(cur_ind)
-        # output$text()
-        
         output$text <- renderText({paste("Current letter: 3")})
-        
     })
     
     observeEvent(input$iterate4, {
@@ -107,10 +117,7 @@ server <- function(input, output) {
         cur_ind <<- cur_ind + 1
         cur_ind <- (cur_ind - 1) %% length(text_list) + 1
         print(cur_ind)
-        # output$text()
-        
         output$text <- renderText({paste("Current letter: 4")})
-        
     })
 }
 
