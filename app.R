@@ -28,7 +28,9 @@ ui <- fluidPage(
                      "Number of bins:",
                      min = 1,
                      max = 50,
-                     value = 30)
+                     value = 30),
+         
+         actionButton("iterate", "Click me")
       ),
       
       # Show a plot of the generated distribution
@@ -41,7 +43,10 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-   
+
+    text_list <- c("a", "b", "c", "d", "e")
+    cur_ind <- 1
+       
    output$distPlot <- renderPlot({
       # generate bins based on input$bins from ui.R
       x    <- faithful[, 2] 
@@ -51,15 +56,17 @@ server <- function(input, output) {
       hist(x, breaks = bins, col = 'darkgray', border = 'white')
    })
    
-   output$text <- 
-       renderText({paste(
-           "You have selected ", 
-           input$var, 
-           "\n", 
-           "You have chosen a range that goes from", 
-           input$range[1], 
-           "to", 
-           input$range[2])
+   output$text <- renderText({paste("Current letter: ", text_list[cur_ind])})
+   
+   observeEvent(input$iterate, {
+       print("Observed!")
+       cur_ind <<- cur_ind + 1
+       cur_ind <- (cur_ind - 1) %% length(text_list) + 1
+       print(cur_ind)
+       # output$text()
+       
+       output$text <- renderText({paste("Current letter: ", text_list[cur_ind])})
+       
    })
 }
 
