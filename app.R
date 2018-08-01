@@ -50,24 +50,25 @@ server <- function(input, output, session) {
         "correct_english" = 0,
         "total" = 0
     )
-    
-    result_display <- TRUE
+
+    first <- TRUE
+    result_display <- FALSE
     dict <- setup_character_dict()
     character_stats <- setup_character_stats(dict)
-    render(session, dict, cur_ind, global_stats, character_stats, FALSE)
+    render(session, dict, cur_ind, global_stats, character_stats, result_display)
     cur_ind <<- sample(seq_len(length(dict)), 1)
     
     observeEvent(input$iterate, {
         
-        print("Iterate")
-        if (result_display) {
-            result_display <<- FALSE
-            print("display")
-            # show_results(dict, cur_ind)
-            # render(session, dict, cur_ind, global_stats, character_stats, result_check)
+        if (first) {
+            first <<- FALSE
+            result_display <<- TRUE
+        }
+        else if (!result_display) {
+            result_display <<- TRUE
         }
         else {
-            result_display <<- TRUE
+            result_display <<- FALSE
             global_stats[["total"]] <<- global_stats[["total"]] + 1
             cur_ind <<- sample(seq_len(length(dict)), 1)
         }

@@ -8,16 +8,14 @@ render <- function(session, dict, cur_ind, global_stats, character_stats, result
     })
     
     session$output$char_display <- renderText({
-        paste0("<div style='font-size:30px'>", get_char_string(dict), "</div>")
+        html(get_char_string(dict), size=30)
     })
     
     session$output$hint <- renderText({
-        paste0("<div style='font-size:30px'>", 
-               get_hint_text(dict[[cur_ind]], session$input$hint_level),
-               "</div>")
+        html(paste(get_hint_text(dict[[cur_ind]], session$input$hint_level)), size=30)
     })
     
-    session$output$text <- renderText({paste0('<div style="font-size:200px;">', dict[[cur_ind]][1], '</div>')})
+    session$output$text <- renderText({html(dict[[cur_ind]][1], size=200)})
     
     session$output$statistics <- renderText({
         paste(
@@ -27,7 +25,7 @@ render <- function(session, dict, cur_ind, global_stats, character_stats, result
             '<br>Total: ', global_stats[["total"]])
     })
 
-    session$output$result <- renderText(get_result_string(dict, cur_ind, active=!result_check))
+    session$output$result <- renderText(get_result_string(dict, cur_ind, active=result_check))
 }
 
 show_results <- function(session, dict, cur_ind) {

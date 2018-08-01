@@ -32,7 +32,7 @@ get_hint_text <- function(char_entry, hint_level) {
     }
     else if (hint_level == "Tone") {
         
-        tones <- c("má", "mā", "mǎ", "mà","ma")
+        tones <- c("á", "ā", "ǎ", "à","a")
         tone_level <- as.numeric(char_entry[4])
         print(paste("Tone level:", tone_level, "tone:", tones[tone_level]))
         hint_string <- paste("Tone:", tones[tone_level])
@@ -63,7 +63,7 @@ get_result_string <- function(char_list, index, active) {
         paste("Correct:", expected_english, expected_pinying)
     }
     else {
-        "Waiting..."
+        "Type your answer..."
     }
 }
 
@@ -77,21 +77,28 @@ get_char_string <- function(char_list) {
     paste(char_vect, collapse=", ")
 }
 
-check_correct <- function(char_list, index, input_pinying, input_english, debug=TRUE) {
+check_correct <- function(char_list, index, input_pinying, input_english) {
     
     expected_pinying <- char_list[[index]][2]
     expected_english <- char_list[[index]][3]
-
-    if (debug) {
-        print(paste(
-            "Input: ",
-            input_pinying,
-            input_english,
-            "Correct: ",
-            expected_pinying,
-            expected_english
-        ))
-    }
-        
     expected_pinying == input_pinying && expected_english == input_english
 }
+
+html <- function(string, size=NULL, color=NULL) {
+    
+    if (!is.null(size)) {
+        paste0("<div style='font-size:", size, "px'>", string, "</div>")
+    }
+    else {
+        paste0("<div>", string, "</div>")
+    }
+}
+
+
+
+
+
+
+
+
+
