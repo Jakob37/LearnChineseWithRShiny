@@ -19,7 +19,7 @@ setup_character_stats <- function(dict) {
     char_stats <- list()
     
     for (char_ind in seq_len(length(dict))) {
-        char_stats[[char_ind]] <- 0
+        char_stats[[char_ind]] <- list(right=0, wrong=0)
     }
     
     char_stats
@@ -67,6 +67,25 @@ get_result_string <- function(char_list, index, active) {
     }
 }
 
+check_correct <- function(entry, input_pinying, input_english, type) {
+    
+    expected_pinying <- entry[2]
+    expected_english <- entry[3]
+    
+    if (type == "Both") {
+        expected_pinying == input_pinying && expected_english == input_english
+    }
+    else if (type == "English") {
+        expected_english == input_english
+    }
+    else if (type == "Pinying") {
+        expected_english == input_pinying
+    }
+    else {
+        stop(paste("Unknown type:", type))
+    }
+}
+
 get_char_string <- function(char_list) {
     
     char_vect <- unlist(lapply(
@@ -77,28 +96,31 @@ get_char_string <- function(char_list) {
     paste(char_vect, collapse=", ")
 }
 
-check_correct <- function(char_list, index, input_pinying, input_english) {
-    
-    expected_pinying <- char_list[[index]][2]
-    expected_english <- char_list[[index]][3]
-    expected_pinying == input_pinying && expected_english == input_english
-}
-
-html <- function(string, size=NULL, color=NULL) {
-    
-    if (!is.null(size)) {
-        paste0("<div style='font-size:", size, "px'>", string, "</div>")
+get_parsed_char_string <- function(dict, character_stats) {
+ 
+    char_vect <- c("<div>")
+    for (ind in seq_len(length(dict))) {
+        
+        entry <- dict[[ind]]
+        
+        char <- entry[1]
+        right <- character_stats[[ind]]$right
+        wrong <- character_stats[[ind]]$wrong
+        
+        print(right, wrong)
+        
+        new_char <- char
+        if (right > 0) {
+            char_vect <- c(char_vect, html(char, 30, color="green"))
+        }
+        else {
+            char_vect <- c(char_vect, html(char, 30, color="grey"))
+        }
     }
-    else {
-        paste0("<div>", string, "</div>")
-    }
+    
+    char_vect <- c(char_vect, "</div>")
+    out <- paste(char_vect, collapse=" ")
+    print(out)
+    out
 }
-
-
-
-
-
-
-
-
 

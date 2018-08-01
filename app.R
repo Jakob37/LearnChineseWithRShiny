@@ -3,6 +3,7 @@ library(shiny)
 
 source("functions.R")
 source("display.R")
+source("util.R")
 
 ui <- fluidPage(
     
@@ -25,6 +26,11 @@ ui <- fluidPage(
                 inputId = 'hint_level', 
                 label = 'Hint level', 
                 choices = c("None", "Tone", "Pinying", "English", "All")
+            ),
+            selectInput(
+                inputId = 'practice_type', 
+                label = 'Practice type', 
+                choices = c("English", "Pinying", "Both")
             ),
             textInput("pinying", "Enter pinying"),
             textInput("english", "Enter english"),
@@ -66,6 +72,23 @@ server <- function(input, output, session) {
         }
         else if (!result_display) {
             result_display <<- TRUE
+            input_english <- input$english
+            input_pinying <- input$pinying
+            
+            print(input_english)
+            correct <- check_correct(
+                dict[[cur_ind]], 
+                input_pinying, 
+                input_english, 
+                type=input$practice_type)
+            
+            print(correct)
+            if (correct) {
+                character_stats[[cur_ind]]$right <<- character_stats[[cur_ind]]$right + 1
+            }
+            else {
+                character_stats[[cur_ind]]$wrong <<- character_stats[[cur_ind]]$wrong + 1
+            }
         }
         else {
             result_display <<- FALSE

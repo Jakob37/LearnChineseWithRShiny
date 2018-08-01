@@ -8,7 +8,8 @@ render <- function(session, dict, cur_ind, global_stats, character_stats, result
     })
     
     session$output$char_display <- renderText({
-        html(get_char_string(dict), size=30)
+        # html(get_char_string(dict), size=30)
+        get_parsed_char_string(dict, character_stats)
     })
     
     session$output$hint <- renderText({
