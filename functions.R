@@ -1,5 +1,28 @@
-test_print <- function() {
-    print("Executing a test print")
+setup_character_dict <- function() {
+    dict <- list()
+    dict[[1]] <- c("一", "yi1", "one", 1)
+    dict[[2]] <- c("丨", "gun3", "line", 3)
+    dict[[3]] <- c("丶", "zhu3", "dot", 3)
+    dict[[4]] <- c("丿	乀", "fu2", "slash", 2)
+    dict[[5]] <- c("乙 乚", "yin3", "second", 3)
+    dict[[6]] <- c("亅", "jue2", "hook", 2)
+    dict[[7]] <- c("二", "er4", "two", 4)
+    dict[[8]] <- c("亠", "tou2", "lid", 2)
+    dict[[9]] <- c("人 亻", "ren2", "man", 2)
+    dict[[10]] <- c("儿", "er2", "legs", 2)
+    
+    dict
+}
+
+setup_character_stats <- function(dict) {
+    
+    char_stats <- list()
+    
+    for (char_ind in seq_len(length(dict))) {
+        char_stats[[char_ind]] <- 0
+    }
+    
+    char_stats
 }
 
 get_hint_text <- function(char_entry, hint_level) {
@@ -32,10 +55,16 @@ get_hint_text <- function(char_entry, hint_level) {
     hint_string
 }
 
-get_result_string <- function(char_list, index) {
-    expected_pinying <- char_list[[index]][2]
-    expected_english <- char_list[[index]][3]
-    paste("Correct:", expected_english, expected_pinying)
+get_result_string <- function(char_list, index, active) {
+    
+    if (active) {
+        expected_pinying <- char_list[[index]][2]
+        expected_english <- char_list[[index]][3]
+        paste("Correct:", expected_english, expected_pinying)
+    }
+    else {
+        "Waiting..."
+    }
 }
 
 get_char_string <- function(char_list) {
