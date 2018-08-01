@@ -21,10 +21,23 @@ update_character_stats <- function(session, dict, character_stats, cur_ind) {
     character_stats
 }
 
-select_character_index <- function(dict, character_stats) {
+select_character_index <- function(dict, character_stats, slice_size=10) {
+    
+    rank_vector <- c()
+    
     for (ind in seq_len(length(dict))) {
         right <- character_stats[[ind]]$right
         wrong <- character_stats[[ind]]$wrong
-        
+        rank_vector[as.character(ind)] <- right / (wrong+1)
     }
+    
+    candidate_vector <- sort(rank_vector)[seq_len(slice_size)]
+    pick <- as.numeric(sample(names(candidate_vector), 1))
+    print(paste("The pick is:", pick))
+    pick
 }
+
+
+
+
+

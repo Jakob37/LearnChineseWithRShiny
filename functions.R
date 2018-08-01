@@ -91,7 +91,7 @@ get_result_string <- function(char_list, index, active) {
         paste("Correct:", expected_english, expected_pinying)
     }
     else {
-        "Type your answer..."
+        "Type your answer to the left..."
     }
 }
 
@@ -113,16 +113,6 @@ check_correct <- function(entry, input_pinying, input_english, type) {
         stop(paste("Unknown type:", type))
     }
 }
-
-# get_char_string <- function(char_list) {
-#     
-#     char_vect <- unlist(lapply(
-#         char_list, 
-#         function(entry) {
-#             entry[1]
-#         }))
-#     paste(char_vect, collapse=", ")
-# }
 
 get_parsed_char_string <- function(dict, character_stats, size) {
  

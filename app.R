@@ -88,7 +88,7 @@ server <- function(input, output, session) {
         else {
             result_display <<- FALSE
             global_stats[["total"]] <<- global_stats[["total"]] + 1
-            cur_ind <<- sample(seq_len(length(dict)), 1)
+            cur_ind <<- select_character_index(dict, character_stats, slice_size=10)
         }
         render(session, dict, cur_ind, global_stats, character_stats, result_display)
     })

@@ -20,11 +20,11 @@ render <- function(session, dict, cur_ind, global_stats, character_stats, result
     session$output$text <- renderText({html(dict[[cur_ind]]$character, size=200)})
     
     session$output$statistics <- renderText({
-        paste(
-            'Correct: ', global_stats[["correct"]],
-            '<br>Correct Pinying: ', global_stats[["correct_pinying"]],
-            '<br>Correct English: ', global_stats[["correct_english"]],
-            '<br>Total: ', global_stats[["total"]])
+        # paste(
+            # 'Correct: ', global_stats[["correct"]],
+            # '<br>Correct Pinying: ', global_stats[["correct_pinying"]],
+            # '<br>Correct English: ', global_stats[["correct_english"]],
+            html(paste('Total tries:', global_stats[["total"]]), size=30)
     })
 
     session$output$result <- renderText(
