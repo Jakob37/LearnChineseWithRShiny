@@ -4,6 +4,7 @@ library(shiny)
 source("functions.R")
 source("display.R")
 source("util.R")
+source("matching.R")
 
 ui <- fluidPage(
     
@@ -69,26 +70,11 @@ server <- function(input, output, session) {
         if (first) {
             first <<- FALSE
             result_display <<- TRUE
+            character_stats <<- update_character_stats(session, dict, character_stats, cur_ind)
         }
         else if (!result_display) {
             result_display <<- TRUE
-            input_english <- input$english
-            input_pinying <- input$pinying
-            
-            print(input_english)
-            correct <- check_correct(
-                dict[[cur_ind]], 
-                input_pinying, 
-                input_english, 
-                type=input$practice_type)
-            
-            print(correct)
-            if (correct) {
-                character_stats[[cur_ind]]$right <<- character_stats[[cur_ind]]$right + 1
-            }
-            else {
-                character_stats[[cur_ind]]$wrong <<- character_stats[[cur_ind]]$wrong + 1
-            }
+            character_stats <<- update_character_stats(session, dict, character_stats, cur_ind)
         }
         else {
             result_display <<- FALSE

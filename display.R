@@ -30,7 +30,6 @@ render <- function(session, dict, cur_ind, global_stats, character_stats, result
 }
 
 show_results <- function(session, dict, cur_ind) {
-    print("show results")
     session$output$result <- renderText(get_result_string(dict, cur_ind))
 }
 

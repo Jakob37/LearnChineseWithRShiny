@@ -98,7 +98,13 @@ get_char_string <- function(char_list) {
 
 get_parsed_char_string <- function(dict, character_stats) {
  
-    char_vect <- c("<div>")
+    gray_level <- 255
+    char_gray_level <- 200
+    font_size <- 40
+    
+    char_vect <- c(paste0("<div style='background-color:rgb(",
+                   paste(rep(gray_level, 3), collapse=", "),
+                   ");'>"))
     for (ind in seq_len(length(dict))) {
         
         entry <- dict[[ind]]
@@ -110,11 +116,17 @@ get_parsed_char_string <- function(dict, character_stats) {
         print(right, wrong)
         
         new_char <- char
-        if (right > 0) {
-            char_vect <- c(char_vect, html(char, 30, color="green"))
+        if (right - wrong > 0) {
+            char_vect <- c(char_vect, html(char, font_size, color=c(0, 200, 0)))
+        }
+        else if (wrong - right > 0) {
+            char_vect <- c(char_vect, html(char, font_size, color=c(400, 0, 0)))
         }
         else {
-            char_vect <- c(char_vect, html(char, 30, color="grey"))
+            char_vect <- c(char_vect, html(
+                char, 
+                font_size,
+                color=c(char_gray_level, char_gray_level, char_gray_level)))
         }
     }
     

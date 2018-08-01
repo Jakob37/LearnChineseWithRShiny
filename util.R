@@ -8,7 +8,13 @@ html <- function(string, size=NULL, color=NULL) {
     }
     
     if (!is.null(color)) {
-        color_part <- paste0("color:", color, ";")
+        color_part <- paste0("color:", 
+                             paste0("rgb(",
+                                    color[1], ",",
+                                    color[2], ",",
+                                    color[3],
+                                    ")"), 
+                             ";")
     }
     else {
         color_part <- ""
@@ -21,7 +27,6 @@ html <- function(string, size=NULL, color=NULL) {
         out <- paste0("<span>", string, "</span>")
     }
     
-    # print(out)
     out
 }
 
