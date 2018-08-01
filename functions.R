@@ -95,26 +95,7 @@ get_result_string <- function(char_list, index, active) {
     }
 }
 
-check_correct <- function(entry, input_pinying, input_english, type) {
-    
-    expected_pinying <- entry$pinying
-    expected_english <- entry$english
-    
-    if (type == "Both") {
-        expected_pinying == input_pinying && expected_english == input_english
-    }
-    else if (type == "English") {
-        expected_english == input_english
-    }
-    else if (type == "Pinying") {
-        expected_english == input_pinying
-    }
-    else {
-        stop(paste("Unknown type:", type))
-    }
-}
-
-get_parsed_char_string <- function(dict, character_stats, size) {
+get_parsed_char_string <- function(dict, character_stats, size, green_threshold) {
  
     gray_level <- 255
     char_gray_level <- 200
@@ -132,20 +113,26 @@ get_parsed_char_string <- function(dict, character_stats, size) {
         right <- character_stats[[ind]]$right
         wrong <- character_stats[[ind]]$wrong
         
-        # print(right, wrong)
+        green_c <- c(0, 200, 0)
+        red_c <- c(400, 0, 0)
+        black_c <- c(0, 0, 0)
+        gray_c <- c(200, 200, 200)
         
         new_char <- char
-        if (right - wrong > 0) {
-            char_vect <- c(char_vect, html(char, font_size, color=c(0, 200, 0)))
-        }
-        else if (wrong - right > 0) {
-            char_vect <- c(char_vect, html(char, font_size, color=c(400, 0, 0)))
-        }
-        else {
+        if (wrong + right == 0) {
             char_vect <- c(char_vect, html(
                 char, 
                 font_size,
                 color=c(char_gray_level, char_gray_level, char_gray_level)))
+        }
+        else if (right - wrong >= green_threshold) {
+            char_vect <- c(char_vect, html(char, font_size, color=green_c))
+        }
+        else if (wrong - right > 0) {
+            char_vect <- c(char_vect, html(char, font_size, color=red_c))
+        }
+        else {
+            char_vect <- c(char_vect, html(char, font_size, color=black_c))
         }
     }
     

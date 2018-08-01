@@ -21,6 +21,32 @@ update_character_stats <- function(session, dict, character_stats, cur_ind) {
     character_stats
 }
 
+check_correct <- function(entry, input_pinying, input_english, type) {
+    
+    expected_pinying <- entry$pinying
+    expected_english <- entry$english
+    
+    if (type == "Both") {
+        result <- expected_pinying == input_pinying && expected_english == input_english
+    }
+    else if (type == "English") {
+        result <- expected_english == input_english
+    }
+    else if (type == "Pinying") {
+        result <- expected_english == input_pinying
+    }
+    else {
+        stop(paste("Unknown type:", type))
+    }
+    
+    print(paste0(
+        result,
+        ", Expected: '", expected_english, "', '", expected_pinying, "'",
+        " Observed: '", input_english, "', '", input_pinying, "'"))
+    
+    result
+}
+
 select_character_index <- function(dict, character_stats, slice_size=10) {
     
     rank_vector <- c()

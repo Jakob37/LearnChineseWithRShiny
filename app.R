@@ -68,8 +68,6 @@ server <- function(input, output, session) {
     first <- TRUE
     result_display <- FALSE
     dict <- setup_dict_from_file("data/radicals.txt")
-    # dict <- setup_character_dict()
-    # print(head(dict))
     character_stats <- setup_character_stats(dict)
     render(session, dict, cur_ind, global_stats, character_stats, result_display)
     cur_ind <<- sample(seq_len(length(dict)), 1)

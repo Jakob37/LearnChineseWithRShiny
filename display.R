@@ -7,24 +7,20 @@ render <- function(session, dict, cur_ind, global_stats, character_stats, result
         actionButton("iterate", label=paste("text -", cur_ind))
     })
     
+    green_thres <- 3
+    
     session$output$char_display <- renderText({
-        # html(get_char_string(dict), size=30)
-        get_parsed_char_string(dict, character_stats, 20)
+        get_parsed_char_string(dict, character_stats, 20, green_threshold = green_thres)
     })
     
     session$output$hint <- renderText({
         html(paste(get_hint_text(dict[[cur_ind]], session$input$hint_level)), size=30)
     })
     
-    # print(dict)
     session$output$text <- renderText({html(dict[[cur_ind]]$character, size=200)})
     
     session$output$statistics <- renderText({
-        # paste(
-            # 'Correct: ', global_stats[["correct"]],
-            # '<br>Correct Pinying: ', global_stats[["correct_pinying"]],
-            # '<br>Correct English: ', global_stats[["correct_english"]],
-            html(paste('Total tries:', global_stats[["total"]]), size=30)
+        html(paste('Total tries:', global_stats[["total"]]), size=30)
     })
 
     session$output$result <- renderText(

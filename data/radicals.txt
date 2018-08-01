@@ -21,15 +21,15 @@ index	character	alternative	pinying	english	strokes
 20	勹	 	bao1	wrap	2
 21	匕	 	bi3	spoon	2
 22	匚	 	fang1	right open box	2
-23	匸	 	xi3	hiding enclo­sure	2
+23	匸	 	xi3	hiding enclosure	2
 24	十	 	shi2	ten	2
-25	卜	 	bu3	mysti­cism	2
+25	卜	 	bu3	mysticism	2
 26	卩	 	jie2	seal	2
 27	厂	 	han4	cliff	2
 28	厶	 	si1	private	2
 29	又	 	you4	again	2
 30	口	 	kou3	mouth	3
-31	囗	 	wei2	enclo­sure	3
+31	囗	 	wei2	enclosure	3
 32	土	 	tu3	earth	3
 33	士	 	shi4	scholar	3
 34	夂	 	zhi3	go	3
@@ -44,7 +44,7 @@ index	character	alternative	pinying	english	strokes
 43	尢	尣	wang1	lame	3
 44	尸	 	shi1	corpse	3
 45	屮	 	che4	sprout	3
-46	山	 	shan1	moun­tain	3
+46	山	 	shan1	mountain	3
 47	川	巛 / 巜 	chuan1	river	3
 48	工	 	gong1	work	3
 49	己	 	ji3	oneself	3
@@ -93,7 +93,7 @@ index	character	alternative	pinying	english	strokes
 92	牙	 	ya2	fang	4
 93	牛	牜	niu2	cow	4
 94	犬	犭	quan3	dog	4
-95	玄	 	xuan2	pro­found	5
+95	玄	 	xuan2	profound	5
 96	玉	王	yu4	jade	5
 97	瓜	 	gua1	melon	5
 98	瓦	 	wa3	tile	5
@@ -102,7 +102,7 @@ index	character	alternative	pinying	english	strokes
 101	用	 	yong4	use	5
 102	田	 	tian2	field	5
 103	疋	 	pi3	bolt of cloth	5
-104	疒	 	chuang2	sick­ness	5
+104	疒	 	chuang2	sickness	5
 105	癶	 	bo4	dotted tent	5
 106	白	 	bai2	white	5
 107	皮	 	pi2	skin	5
@@ -129,20 +129,20 @@ index	character	alternative	pinying	english	strokes
 128	耳	 	er3	ear	6
 129	聿	 	yu4	brush	6
 130	肉	 	rou4	meat	6
-131	臣	 	chen2	minis­ter	6
+131	臣	 	chen2	minister	6
 132	自	 	zi4	self	6
 133	至	 	zhi4	arrive	6
 134	臼	 	jiu4	mortar	6
 135	舌	 	she2	tongue	6
 136	舛	 	chuan3	oppose	6
 137	舟	 	zhou1	boat	6
-138	艮	 	gen4	stop­ping	6
+138	艮	 	gen4	stopping	6
 139	色	 	se4	color	6
 140	艸	艹	cao3	grass	6
 141	虍	 	hu1	tiger	6
 142	虫	 	chong2	insect	6
 143	血	 	xue3	blood	6
-144	行	 	xing2	walk enclo­sure	6
+144	行	 	xing2	walk enclosure	6
 145	衣	衤	yi1	clothes	6
 146	襾	覀	ya4	west	6
 147	見	见	jian4	see	7
@@ -163,7 +163,7 @@ index	character	alternative	pinying	english	strokes
 162	辵	辶	chuo4	walk	7
 163	邑	阝 (right)	yi4	city	7
 164	酉	 	you3	wine	7
-165	釆	 	bian4	distin­guish	7
+165	釆	 	bian4	distinguish	7
 166	里	 	li3	village	7
 167	金	 	jin1	gold	8
 168	長	长	chang2	long	8
@@ -190,8 +190,8 @@ index	character	alternative	pinying	english	strokes
 189	高	 	gao1	tall	10
 190	髟	 	biao1	hair	10
 191	鬥	 	dou4	fight	10
-192	鬯	 	chang4	sacri­ficial wine	10
-193	鬲	 	li4	caul­dron	10
+192	鬯	 	chang4	sacrificial wine	10
+193	鬲	 	li4	cauldron	10
 194	鬼	 	gui3	ghost	10
 195	魚	鱼	yu2	fish	11
 196	鳥	鸟	niao3	bird	11
@@ -202,7 +202,7 @@ index	character	alternative	pinying	english	strokes
 201	黃	 	huang2	yellow	12
 202	黍	 	shu3	millet	12
 203	黑	 	hei1	black	12
-204	黹	 	zhi3	embroi­dery	12
+204	黹	 	zhi3	embroidery	12
 205	黽	黾	min3	frog	13
 206	鼎	 	ding3	tripod	13
 207	鼓	 	gu3	drum	13
