@@ -9,14 +9,15 @@ render <- function(session, dict, cur_ind, global_stats, character_stats, result
     
     session$output$char_display <- renderText({
         # html(get_char_string(dict), size=30)
-        get_parsed_char_string(dict, character_stats)
+        get_parsed_char_string(dict, character_stats, 20)
     })
     
     session$output$hint <- renderText({
         html(paste(get_hint_text(dict[[cur_ind]], session$input$hint_level)), size=30)
     })
     
-    session$output$text <- renderText({html(dict[[cur_ind]][1], size=200)})
+    # print(dict)
+    session$output$text <- renderText({html(dict[[cur_ind]]$character, size=200)})
     
     session$output$statistics <- renderText({
         paste(
@@ -26,7 +27,8 @@ render <- function(session, dict, cur_ind, global_stats, character_stats, result
             '<br>Total: ', global_stats[["total"]])
     })
 
-    session$output$result <- renderText(get_result_string(dict, cur_ind, active=result_check))
+    session$output$result <- renderText(
+        html(get_result_string(dict, cur_ind, active=result_check), size=30))
 }
 
 show_results <- function(session, dict, cur_ind) {

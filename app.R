@@ -1,10 +1,18 @@
 library(shiny)
+library(tidyverse)
 # library(shinyWidgets)
 
 source("functions.R")
 source("display.R")
 source("util.R")
 source("matching.R")
+
+# Data format
+# char <- row[["character"]]
+# alt_char <- row[["alternative"]]
+# pinying <- row[["pinying"]]
+# english <- row[["english"]]
+# strokes <- row[["strokes"]]
 
 ui <- fluidPage(
     
@@ -39,12 +47,11 @@ ui <- fluidPage(
         ),
         
         mainPanel(
-            htmlOutput("char_display"),
             htmlOutput("text"),
             htmlOutput("statistics"),
             htmlOutput("hint"),
             htmlOutput("result"),
-            plotOutput("distPlot")
+            htmlOutput("char_display")
         )
     )
 )
@@ -60,7 +67,9 @@ server <- function(input, output, session) {
 
     first <- TRUE
     result_display <- FALSE
-    dict <- setup_character_dict()
+    dict <- setup_dict_from_file("data/radicals.txt")
+    # dict <- setup_character_dict()
+    # print(head(dict))
     character_stats <- setup_character_stats(dict)
     render(session, dict, cur_ind, global_stats, character_stats, result_display)
     cur_ind <<- sample(seq_len(length(dict)), 1)

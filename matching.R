@@ -20,3 +20,11 @@ update_character_stats <- function(session, dict, character_stats, cur_ind) {
     
     character_stats
 }
+
+select_character_index <- function(dict, character_stats) {
+    for (ind in seq_len(length(dict))) {
+        right <- character_stats[[ind]]$right
+        wrong <- character_stats[[ind]]$wrong
+        
+    }
+}
