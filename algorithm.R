@@ -1,6 +1,6 @@
 
 
-update_character_stats <- function(session, dict, character_stats, cur_ind) {
+update_character_stats <- function(session, dict, character_stats, cur_ind, debug=T) {
     
     input_english <- session$input$english
     input_pinying <- session$input$pinying
@@ -9,7 +9,8 @@ update_character_stats <- function(session, dict, character_stats, cur_ind) {
         dict[[cur_ind]], 
         input_pinying, 
         input_english, 
-        type=session$input$practice_type)
+        type=session$input$practice_type,
+        debug=debug)
     
     if (correct) {
         character_stats[[cur_ind]]$right <- character_stats[[cur_ind]]$right + 1
@@ -18,10 +19,15 @@ update_character_stats <- function(session, dict, character_stats, cur_ind) {
         character_stats[[cur_ind]]$wrong <- character_stats[[cur_ind]]$wrong + 1
     }
     
+    if (debug) {
+        print(paste("Correct: ", character_stats[[cur_ind]]$right, 
+              "Wrong: ", character_stats[[cur_ind]]$wrong))
+    }
+    
     character_stats
 }
 
-check_correct <- function(entry, input_pinying, input_english, type) {
+check_correct <- function(entry, input_pinying, input_english, type, debug=F) {
     
     expected_pinying <- entry$pinying
     expected_english <- entry$english
@@ -47,23 +53,34 @@ check_correct <- function(entry, input_pinying, input_english, type) {
     result
 }
 
-select_character_index <- function(dict, character_stats, slice_size=10) {
+select_character_index <- function(dict, character_stats, threshold, slice_size=10) {
     
     rank_vector <- c()
     
-    for (ind in seq_len(length(dict))) {
-        right <- character_stats[[ind]]$right
-        wrong <- character_stats[[ind]]$wrong
-        rank_vector[as.character(ind)] <- right / (wrong+1)
+    calculate_weight <- function(right, wrong) {
+        right / (wrong + 1) - wrong / 5
     }
     
+    for (ind in seq_len(length(dict))) {
+        
+        right <- character_stats[[ind]]$right
+        wrong <- character_stats[[ind]]$wrong
+        
+        if (right - wrong < threshold) {
+            rank_vector[as.character(ind)] <- calculate_weight(right, wrong)
+        }
+    }
+    
+    if (length(rank_vector) == 0) {
+        stop("YOU WIN")
+    }
+    
+    rank_vector <- sample(rank_vector)
+    # print(rank_vector)
     candidate_vector <- sort(rank_vector)[seq_len(slice_size)]
+    # print(candidate_vector)
     pick <- as.numeric(sample(names(candidate_vector), 1))
-    print(paste("The pick is:", pick))
+    # print(pick)
     pick
 }
-
-
-
-
 

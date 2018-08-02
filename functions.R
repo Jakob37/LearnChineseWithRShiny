@@ -28,15 +28,22 @@ setup_character_dict <- function() {
     dict
 }
 
-setup_dict_from_file <- function(filepath) {
+setup_dict_from_file <- function(filepath, select=0) {
     
     df <- read_tsv(filepath)
     dict <- list()
     
+    selected <- 0
     for (ind in seq_len(nrow(df))) {
         row <- df[ind, ]
         dict[[ind]] <- row
         dict[[ind]]$tone <- "Unspecified"
+        
+        selected <- selected + 1
+        
+        if (select > 0 && selected >= select) {
+            return(dict)
+        }
     }
     
     dict

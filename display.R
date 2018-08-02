@@ -1,4 +1,5 @@
-render <- function(session, dict, cur_ind, global_stats, character_stats, result_check=FALSE) {
+render <- function(session, dict, cur_ind, global_stats, character_stats, 
+                   result_check=FALSE, threshold=1) {
     
     updateTextInput(session, "english", label = NULL, value = "")
     updateTextInput(session, "pinying", label = NULL, value = "")
@@ -7,7 +8,7 @@ render <- function(session, dict, cur_ind, global_stats, character_stats, result
         actionButton("iterate", label=paste("text -", cur_ind))
     })
     
-    green_thres <- 3
+    green_thres <- as.numeric(threshold)
     
     session$output$char_display <- renderText({
         get_parsed_char_string(dict, character_stats, 20, green_threshold = green_thres)
@@ -30,10 +31,5 @@ render <- function(session, dict, cur_ind, global_stats, character_stats, result
 show_results <- function(session, dict, cur_ind) {
     session$output$result <- renderText(get_result_string(dict, cur_ind))
 }
-
-character_color <- function() {
-    
-}
-
 
 

@@ -5,14 +5,7 @@ library(tidyverse)
 source("functions.R")
 source("display.R")
 source("util.R")
-source("matching.R")
-
-# Data format
-# char <- row[["character"]]
-# alt_char <- row[["alternative"]]
-# pinying <- row[["pinying"]]
-# english <- row[["english"]]
-# strokes <- row[["strokes"]]
+source("algorithm.R")
 
 ui <- fluidPage(
     
@@ -41,6 +34,11 @@ ui <- fluidPage(
                 label = 'Practice type', 
                 choices = c("English", "Pinying", "Both")
             ),
+            selectInput(
+                inputId = 'threshold', 
+                label = 'Done threshold', 
+                choices = c(1, 2, 3)
+            ),
             textInput("pinying", "Enter pinying"),
             textInput("english", "Enter english"),
             actionButton("iterate", "Enter")
@@ -64,10 +62,10 @@ server <- function(input, output, session) {
         "correct_english" = 0,
         "total" = 0
     )
-
+    
     first <- TRUE
     result_display <- FALSE
-    dict <- setup_dict_from_file("data/radicals.txt")
+    dict <- setup_dict_from_file("data/radicals.txt", select=0)
     character_stats <- setup_character_stats(dict)
     render(session, dict, cur_ind, global_stats, character_stats, result_display)
     cur_ind <<- sample(seq_len(length(dict)), 1)
@@ -77,18 +75,25 @@ server <- function(input, output, session) {
         if (first) {
             first <<- FALSE
             result_display <<- TRUE
-            character_stats <<- update_character_stats(session, dict, character_stats, cur_ind)
+            character_stats <<- update_character_stats(
+                session, dict, character_stats, cur_ind)
         }
         else if (!result_display) {
             result_display <<- TRUE
-            character_stats <<- update_character_stats(session, dict, character_stats, cur_ind)
+            character_stats <<- update_character_stats(
+                session, dict, character_stats, cur_ind)
         }
         else {
             result_display <<- FALSE
             global_stats[["total"]] <<- global_stats[["total"]] + 1
-            cur_ind <<- select_character_index(dict, character_stats, slice_size=10)
+            cur_ind <<- select_character_index(
+                dict, 
+                character_stats, 
+                as.numeric(input$threshold),
+                slice_size=15)
         }
-        render(session, dict, cur_ind, global_stats, character_stats, result_display)
+        render(session, dict, cur_ind, global_stats, 
+               character_stats, result_display, as.numeric(input$threshold))
     })
 }
 
