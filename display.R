@@ -1,12 +1,29 @@
+
+get_groups <- function() {
+    
+    group1 <- CharacterGroup$new("Test1")
+    group1$add_character(CharacterEntry$new("g1char1", "ping", "eng", "comm"))
+    group1$add_character(CharacterEntry$new("g1char2", "ping", "eng", "comm"))
+    group1$add_character(CharacterEntry$new("g1char3", "ping", "eng", "comm"))
+
+    group2 <- CharacterGroup$new("Test2")
+    group2$add_character(CharacterEntry$new("g2char1", "ping", "eng", "comm"))
+    group2$add_character(CharacterEntry$new("g2char2", "ping", "eng", "comm"))
+    group2$add_character(CharacterEntry$new("g2char3", "ping", "eng", "comm"))
+        
+    groups <- list(
+        "group1" = group1,
+        "group2" = group2
+    )
+    
+    groups
+}
+
 render <- function(session, dict, cur_ind, global_stats, character_stats, 
                    result_check=FALSE, threshold=1) {
 
-    groups <- list(
-        "<no selected>" = c(),
-        "group1" = c("A1", "A2", "A3"),
-        "group2" = c("B1", "B2", "B3"),
-        "group3" = c("C1", "C2", "C3")
-    )
+    groups <- get_groups()
+    
     session$output$char_groups <- renderUI({
         selectInput("char_groups", "Select word group", names(groups))
     })
@@ -14,10 +31,9 @@ render <- function(session, dict, cur_ind, global_stats, character_stats,
     session$output$char_details <- renderText({
         
         selected_group <- session$input$char_groups
-
         if (selected_group %in% names(groups)) {
             vapply(
-                groups[[selected_group]], 
+                groups[[selected_group]]$get_char_list(), 
                 function(word) {
                     paste0("<div>", word, "</div>")
                 },

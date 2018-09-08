@@ -6,6 +6,7 @@ source("functions.R")
 source("display.R")
 source("util.R")
 source("algorithm.R")
+source("classes/character_group.R")
 
 ui <- fluidPage(
     
@@ -23,64 +24,88 @@ ui <- fluidPage(
     
     # Sidebar with a slider input for number of bins 
     fluidRow(
-
+        
         column(12,
-            tabsetPanel(
-                tabPanel("Typing",
-                    fluidRow(
-                        column(4,
-                            htmlOutput("text")
-                        ),
-                        column(8,
-                            htmlOutput("char_display")
-                        )
-                    ),
-                    fluidRow(
-                        column(12,
-                            htmlOutput("statistics"),
-                            htmlOutput("hint"),
-                            htmlOutput("result")
-                        )
-                    ),
-                    hr(),
-                    fluidRow(
-                        column(12,
-                               textInput("pinying", "Enter pinying"),
-                               textInput("english", "Enter english"),
-                               actionButton("iterate", "Enter")
-                        )
-                        
-                    )
-                ),
-                tabPanel("Settings",
-                         selectInput(
-                             inputId = 'hint_level', 
-                             label = 'Hint level', 
-                             choices = c("None", "Tone", "Pinying", "English", "All")
-                         ),
-                         selectInput(
-                             inputId = 'practice_type', 
-                             label = 'Practice type', 
-                             choices = c("English", "Pinying", "Both")
-                         ),
-                         selectInput(
-                             inputId = 'threshold', 
-                             label = 'Done threshold', 
-                             choices = c(1, 2, 3)
-                         )
-                ),
-                tabPanel("Character groups",
-                    uiOutput("char_groups"),
-                    uiOutput("char_details")
-                )
-            )
+               tabsetPanel(
+                   tabPanel("Typing",
+                            fluidRow(
+                                column(4,
+                                       htmlOutput("text")
+                                ),
+                                column(8,
+                                       htmlOutput("char_display")
+                                )
+                            ),
+                            fluidRow(
+                                column(12,
+                                       htmlOutput("statistics"),
+                                       htmlOutput("hint"),
+                                       htmlOutput("result")
+                                )
+                            ),
+                            hr(),
+                            fluidRow(
+                                column(12,
+                                       textInput("pinying", "Enter pinying"),
+                                       textInput("english", "Enter english"),
+                                       actionButton("iterate", "Enter")
+                                )
+                                
+                            )
+                   ),
+                   tabPanel("Settings",
+                            selectInput(
+                                inputId = 'hint_level', 
+                                label = 'Hint level', 
+                                choices = c("None", "Tone", "Pinying", "English", "All")
+                            ),
+                            selectInput(
+                                inputId = 'practice_type', 
+                                label = 'Practice type', 
+                                choices = c("English", "Pinying", "Both")
+                            ),
+                            selectInput(
+                                inputId = 'threshold', 
+                                label = 'Done threshold', 
+                                choices = c(1, 2, 3)
+                            )
+                   ),
+                   tabPanel("Character groups",
+                            fluidRow(
+                                column(4,
+                                       uiOutput("char_groups")
+                                ),
+                                column(4,
+                                       textInput("new_group_name", "New group")
+                                ),
+                                column(4,
+                                       actionButton("create_new_group", "Create new group")
+                                ),
+                                tags$style(type="text/css", "#create_new_group {margin-top: 25px}")
+                            ),
+                            fluidRow(
+                                column(12,
+                                       uiOutput("char_details")
+                                )
+                            ),
+                            hr(),
+                            fluidRow(
+                                column(2, textInput("new_entry_char", "Character")),
+                                column(2, textInput("new_entry_english", "English")),
+                                column(2, textInput("new_entry_pinying", "Pinying")),
+                                column(2, textInput("new_entry_comment", "Comment")),
+                                column(4, actionButton("create_new_entry", "New Entry")),
+                                tags$style(type="text/css", "#create_new_entry {margin-top: 25px}")
+                            )
+                   )
+               )
         )
     )
-
+    
 )
 
 server <- function(input, output, session) {
-
+    
     global_stats <- list(
         "correct" = 0,
         "correct_pinying" = 0,
