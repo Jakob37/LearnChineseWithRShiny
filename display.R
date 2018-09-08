@@ -1,5 +1,33 @@
 render <- function(session, dict, cur_ind, global_stats, character_stats, 
                    result_check=FALSE, threshold=1) {
+
+    groups <- list(
+        "<no selected>" = c(),
+        "group1" = c("A1", "A2", "A3"),
+        "group2" = c("B1", "B2", "B3"),
+        "group3" = c("C1", "C2", "C3")
+    )
+    session$output$char_groups <- renderUI({
+        selectInput("char_groups", "Select word group", names(groups))
+    })
+    
+    session$output$char_details <- renderText({
+        
+        selected_group <- session$input$char_groups
+
+        if (selected_group %in% names(groups)) {
+            vapply(
+                groups[[selected_group]], 
+                function(word) {
+                    paste0("<div>", word, "</div>")
+                },
+                ""
+            )            
+        }
+        else {
+            "No words to show"
+        }
+    })
     
     updateTextInput(session, "english", label = NULL, value = "")
     updateTextInput(session, "pinying", label = NULL, value = "")

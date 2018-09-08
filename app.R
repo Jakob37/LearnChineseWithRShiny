@@ -68,6 +68,10 @@ ui <- fluidPage(
                              label = 'Done threshold', 
                              choices = c(1, 2, 3)
                          )
+                ),
+                tabPanel("Character groups",
+                    uiOutput("char_groups"),
+                    uiOutput("char_details")
                 )
             )
         )
