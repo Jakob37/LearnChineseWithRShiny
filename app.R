@@ -7,6 +7,7 @@ source("display.R")
 source("util.R")
 source("algorithm.R")
 source("classes/character_group.R")
+source("db.R")
 
 ui <- fluidPage(
     
@@ -144,6 +145,13 @@ server <- function(input, output, session) {
         }
         render(session, dict, cur_ind, global_stats, 
                character_stats, result_display, as.numeric(input$threshold))
+    })
+    
+    observeEvent(input$create_new_group, {
+        
+        if (input$new_group_name != "") {
+            saveEntry(input$new_group_name, "", debug=TRUE)
+        }
     })
 }
 

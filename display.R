@@ -1,20 +1,28 @@
 
 get_groups <- function() {
     
-    group1 <- CharacterGroup$new("Test1")
-    group1$add_character(CharacterEntry$new("g1char1", "ping", "eng", "comm"))
-    group1$add_character(CharacterEntry$new("g1char2", "ping", "eng", "comm"))
-    group1$add_character(CharacterEntry$new("g1char3", "ping", "eng", "comm"))
+    group_df <- loadGroups()
+    
+    character_entries <- list()
+    groups <- list()
 
-    group2 <- CharacterGroup$new("Test2")
-    group2$add_character(CharacterEntry$new("g2char1", "ping", "eng", "comm"))
-    group2$add_character(CharacterEntry$new("g2char2", "ping", "eng", "comm"))
-    group2$add_character(CharacterEntry$new("g2char3", "ping", "eng", "comm"))
+    for (i in seq_len(nrow(group_df))) {
         
-    groups <- list(
-        "group1" = group1,
-        "group2" = group2
-    )
+        row <- group_df[i, ]
+        group <- row$mygroup
+        character <- row$mycharacter
+        char_entry <- CharacterEntry$new(character, "ping", "eng", "comm")
+        character_entries[[character]] <- char_entry
+        
+        if (!(group %in% names(groups))) {
+            group_entry <- CharacterGroup$new(group)
+            groups[[group]] <- group_entry
+        }
+
+        if (character != "") {
+            groups[[group]]$add_character(char_entry)
+        }
+    }
     
     groups
 }
