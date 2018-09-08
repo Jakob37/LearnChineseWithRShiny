@@ -16,7 +16,7 @@ databaseName <- "learnchinese"
 # table <- "responses"
 
 category_table <- "groups"
-character_table <- "characters"
+word_table <- "words"
 
 # Table scheme
 # Table 1: Groups linked to each character
@@ -25,16 +25,21 @@ character_table <- "characters"
 #  id character english pinying comment
 # Table 3: Processing data (for a bit later)
 
-saveEntry <- function(group, character, debug=FALSE) {
-    
-    # Connect to the database
-    db <- dbConnect(
+getConn <- function() {
+    conn <- dbConnect(
         MySQL(), 
         dbname = databaseName, 
         host = options()$mysql$host, 
         port = options()$mysql$port, 
         user = options()$mysql$user, 
         password = options()$mysql$password)
+    
+    conn
+}
+
+saveEntry <- function(group, character, debug=FALSE) {
+    
+    db <- getConn()
     
     # Construct the update query by looping over the data fields
     query <- sprintf(
@@ -44,11 +49,33 @@ saveEntry <- function(group, character, debug=FALSE) {
         paste0('null, ', "'", group, "', ", "'", character, "'")
     )
     
-    
     if (debug) {
         print(paste("Attempting query:", query))
     }
 
+    # Submit the update query and disconnect
+    dbGetQuery(db, query)
+    dbDisconnect(db)
+}
+
+saveWord <- function(characters, english, pinying, notes="", debug=FALSE) {
+    
+    # INSERT INTO words (myid, mycharacter, myenglish, pinying, note) VALUES (null, '力', 'force', 'li4', 'First comment!');
+    
+    db <- getConn()
+    
+    # Construct the update query by looping over the data fields
+    query <- sprintf(
+        "INSERT INTO %s (%s) VALUES (%s)",
+        word_table, 
+        "myid, mycharacter, myenglish, pinying, note",
+        paste0('null, ', "'", characters, "', '", english, "', '", pinying, "', '", notes, "'")
+    )
+    
+    if (debug) {
+        print(paste("Attempting query:", query))
+    }
+    
     # Submit the update query and disconnect
     dbGetQuery(db, query)
     dbDisconnect(db)

@@ -1,11 +1,16 @@
 
-get_groups <- function() {
+get_groups_and_characters <- function() {
     
     group_df <- loadGroups()
     
     character_entries <- list()
     groups <- list()
+    
+    groups[["All"]] <- CharacterGroup$new("All")
 
+    # Next: Load the character entries from file
+    # Then distribute these among the different groups
+    
     for (i in seq_len(nrow(group_df))) {
         
         row <- group_df[i, ]
@@ -24,6 +29,13 @@ get_groups <- function() {
         }
     }
     
+    for (entry_name in names(character_entries)) {
+        if (entry_name != "") {
+            char_entry <- character_entries[[entry_name]]
+            groups[["All"]]$add_character(char_entry)
+        }
+    }
+    
     groups
 }
 
@@ -31,7 +43,7 @@ render <- function(session, dict, cur_ind, global_stats, character_stats,
                    result_check=FALSE, threshold=1) {
 
     groups <- get_groups()
-    
+
     session$output$char_groups <- renderUI({
         selectInput("char_groups", "Select word group", names(groups))
     })

@@ -148,9 +148,35 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$create_new_group, {
-        
         if (input$new_group_name != "") {
             saveEntry(input$new_group_name, "", debug=TRUE)
+        }
+        updateTextInput(session, "new_group_name", label = NULL, value = "")
+        render(session, dict, cur_ind, global_stats, 
+               character_stats, result_display, as.numeric(input$threshold))    })
+    
+    observeEvent(input$create_new_entry, {
+        
+        if (input$new_entry_char != "" &&
+            input$new_entry_english != "" &&
+            input$new_entry_pinying != "") {
+            
+            saveWord(
+                input$new_entry_char, 
+                input$new_entry_english, 
+                input$new_entry_pinying, 
+                input$new_entry_comment,
+                debug=TRUE)
+            updateTextInput(session, "new_entry_char", label = NULL, value = "")
+            updateTextInput(session, "new_entry_english", label = NULL, value = "")
+            updateTextInput(session, "new_entry_pinying", label = NULL, value = "")
+            updateTextInput(session, "new_entry_comment", label = NULL, value = "")
+            message("New entry successfully created")
+            render(session, dict, cur_ind, global_stats, 
+                   character_stats, result_display, as.numeric(input$threshold))        
+            }
+        else {
+            message("Unable to create new entry, at least one field is missing")
         }
     })
 }
