@@ -22,36 +22,57 @@ ui <- fluidPage(
     titlePanel("Learn chinese characters - with RShiny"),
     
     # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            selectInput(
-                inputId = 'hint_level', 
-                label = 'Hint level', 
-                choices = c("None", "Tone", "Pinying", "English", "All")
-            ),
-            selectInput(
-                inputId = 'practice_type', 
-                label = 'Practice type', 
-                choices = c("English", "Pinying", "Both")
-            ),
-            selectInput(
-                inputId = 'threshold', 
-                label = 'Done threshold', 
-                choices = c(1, 2, 3)
-            ),
-            textInput("pinying", "Enter pinying"),
-            textInput("english", "Enter english"),
-            actionButton("iterate", "Enter")
-        ),
-        
-        mainPanel(
-            htmlOutput("text"),
-            htmlOutput("statistics"),
-            htmlOutput("hint"),
-            htmlOutput("result"),
-            htmlOutput("char_display")
+    fluidRow(
+
+        column(12,
+            tabsetPanel(
+                tabPanel("Typing",
+                    fluidRow(
+                        column(4,
+                            htmlOutput("text")
+                        ),
+                        column(8,
+                            htmlOutput("char_display")
+                        )
+                    ),
+                    fluidRow(
+                        column(12,
+                            htmlOutput("statistics"),
+                            htmlOutput("hint"),
+                            htmlOutput("result")
+                        )
+                    ),
+                    hr(),
+                    fluidRow(
+                        column(12,
+                               textInput("pinying", "Enter pinying"),
+                               textInput("english", "Enter english"),
+                               actionButton("iterate", "Enter")
+                        )
+                        
+                    )
+                ),
+                tabPanel("Settings",
+                         selectInput(
+                             inputId = 'hint_level', 
+                             label = 'Hint level', 
+                             choices = c("None", "Tone", "Pinying", "English", "All")
+                         ),
+                         selectInput(
+                             inputId = 'practice_type', 
+                             label = 'Practice type', 
+                             choices = c("English", "Pinying", "Both")
+                         ),
+                         selectInput(
+                             inputId = 'threshold', 
+                             label = 'Done threshold', 
+                             choices = c(1, 2, 3)
+                         )
+                )
+            )
         )
     )
+
 )
 
 server <- function(input, output, session) {
