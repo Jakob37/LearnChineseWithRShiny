@@ -1,5 +1,6 @@
 library(shiny)
 library(tidyverse)
+library(rhandsontable)
 # library(shinyWidgets)
 
 source("functions.R")
@@ -24,20 +25,6 @@ ui <- fluidPage(
     tags$style(type="text/css", ".row {content:''; display:table; clear: both;}"),
     tags$style(type="text/css", ".col {float:left; width:25%}"),
     
-    # .column {
-    #     float: left;
-    #     width: 50%;
-    # }
-    # 
-    # /* Clear floats after the columns */
-    #     .row:after {
-    #         content: "";
-    #         display: table;
-    #         clear: both;
-    #     }
-    
-    # tags$css(),
-        
     # Application title
     titlePanel("Learn chinese characters - with RShiny"),
     
@@ -45,7 +32,7 @@ ui <- fluidPage(
     fluidRow(
         
         column(12,
-               tabsetPanel(
+               tabsetPanel(id = "tabs",
                    tabPanel("Typing",
                             fluidRow(
                                 column(4,
@@ -102,24 +89,11 @@ ui <- fluidPage(
                                 ),
                                 tags$style(type="text/css", "#create_new_group {margin-top: 25px}")
                             ),
-                            # fluidRow(
-                                # column(3,
-                                #        uiOutput("char_details_char")
-                                # ),
-                                # column(3,
-                                #        uiOutput("char_details_english")
-                                # ),
-                                # column(3,
-                                #        uiOutput("char_details_pinying")
-                                # ),
-                                # column(3,
-                                #        uiOutput("char_details_note")
-                                # )
-                            # ),
                             fluidRow(
-                                column(12,
-                                       tableOutput('out_table')
-                                       )
+                                column(12, rHandsontableOutput('out_table_handson')),
+                                column(12, verbatimTextOutput('table_selected')),
+                                column(12, actionButton("save_table", "Save table")),
+                                column(12, tableOutput('out_table'))
                             ),
                             hr(),
                             fluidRow(
@@ -154,6 +128,10 @@ server <- function(input, output, session) {
     cur_ind <<- sample(seq_len(length(dict)), 1)
     
     observeEvent(input$iterate, {
+        
+        if (!input$tabs == "Typing") {
+            return()
+        }
         
         if (first) {
             first <<- FALSE
@@ -210,6 +188,21 @@ server <- function(input, output, session) {
         else {
             message("Unable to create new entry, at least one field is missing")
         }
+    })
+    
+    observeEvent(input$save_table, {
+        print("Save table called")
+        print("Ready to parse out meaningful changes and update table")
+        print("Edits should be easy - check against the existing IDs")
+        print("Removals more tricky?")
+        
+        # Retrieved from: https://stackoverflow.com/questions/22272571/data-input-via-shinytable-in-r-shiny-application
+        
+        df <- hot_to_r(input$out_table_handson)
+        print(df)
+        
+        # print(hot_to_r(input$out_table_handson_select))
+        # save_df <- isolate()
     })
 }
 

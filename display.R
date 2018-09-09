@@ -69,6 +69,17 @@ render <- function(session, dict, cur_ind, global_stats, character_stats,
         character_entries_table
     })
     
+    session$output$out_table_handson <- renderRHandsontable({
+        selected_group <- session$input$char_groups
+        available_chars <- names(groups[[selected_group]]$characters)
+        character_entries_table <- loadTableToDf("words") %>% filter(mycharacter %in% available_chars)
+        rhandsontable(character_entries_table, stretchH="all", selectCallback=TRUE)
+    })
+    
+    session$output$table_selected <- renderText({
+        paste("Selected row:", session$input$out_table_handson_select$select$r)
+    })
+    
     updateTextInput(session, "english", label = NULL, value = "")
     updateTextInput(session, "pinying", label = NULL, value = "")
     
