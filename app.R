@@ -102,19 +102,24 @@ ui <- fluidPage(
                                 ),
                                 tags$style(type="text/css", "#create_new_group {margin-top: 25px}")
                             ),
+                            # fluidRow(
+                                # column(3,
+                                #        uiOutput("char_details_char")
+                                # ),
+                                # column(3,
+                                #        uiOutput("char_details_english")
+                                # ),
+                                # column(3,
+                                #        uiOutput("char_details_pinying")
+                                # ),
+                                # column(3,
+                                #        uiOutput("char_details_note")
+                                # )
+                            # ),
                             fluidRow(
-                                column(3,
-                                       uiOutput("char_details_char")
-                                ),
-                                column(3,
-                                       uiOutput("char_details_english")
-                                ),
-                                column(3,
-                                       uiOutput("char_details_pinying")
-                                ),
-                                column(3,
-                                       uiOutput("char_details_note")
-                                )
+                                column(12,
+                                       tableOutput('out_table')
+                                       )
                             ),
                             hr(),
                             fluidRow(

@@ -61,46 +61,12 @@ render <- function(session, dict, cur_ind, global_stats, character_stats,
     session$output$char_groups <- renderUI({
         selectInput("char_groups", "Select word group", names(groups))
     })
-    
-    session$output$char_details_char <- renderText({
-        selected_group <<- session$input$char_groups
-        selected_group_entry <- groups[[selected_group]]
-        vapply(selected_group_entry$characters,
-            function(character_entry) {
-                paste0("<div>", character_entry$character, "</div>")
-            }, "")
-    })
 
-    session$output$char_details_english <- renderText({
-        selected_group <<- session$input$char_groups
-        selected_group_entry <- groups[[selected_group]]
-        vapply(selected_group_entry$characters,
-               function(character_entry) {
-                   paste0("<div>", character_entry$english, "</div>")
-               }, "")
-    })
-
-    session$output$char_details_pinying <- renderText({
-        selected_group <<- session$input$char_groups
-        selected_group_entry <- groups[[selected_group]]
-        vapply(selected_group_entry$characters,
-               function(character_entry) {
-                   paste0("<div>", character_entry$pinying, "</div>")
-               }, "")
-    })
-
-    session$output$char_details_note <- renderText({
-        selected_group <<- session$input$char_groups
-        selected_group_entry <- groups[[selected_group]]
-        vapply(selected_group_entry$characters,
-               function(character_entry) {
-                   if (character_entry$comment == "") {
-                       "-"
-                   }
-                   else {
-                       paste0("<div>", character_entry$comment, "</div>")
-                   }
-               }, "")
+    session$output$out_table <- renderTable({
+        selected_group <- session$input$char_groups
+        available_chars <- names(groups[[selected_group]]$characters)
+        character_entries_table <- loadTableToDf("words") %>% filter(mycharacter %in% available_chars)
+        character_entries_table
     })
     
     updateTextInput(session, "english", label = NULL, value = "")
