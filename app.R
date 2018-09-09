@@ -19,7 +19,25 @@ ui <- fluidPage(
       }
       });
       })")),
+
+    tags$style(type="text/css", ".vadj {margin-top: 25px}"),
+    tags$style(type="text/css", ".row {content:''; display:table; clear: both;}"),
+    tags$style(type="text/css", ".col {float:left; width:25%}"),
     
+    # .column {
+    #     float: left;
+    #     width: 50%;
+    # }
+    # 
+    # /* Clear floats after the columns */
+    #     .row:after {
+    #         content: "";
+    #         display: table;
+    #         clear: both;
+    #     }
+    
+    # tags$css(),
+        
     # Application title
     titlePanel("Learn chinese characters - with RShiny"),
     
@@ -85,8 +103,17 @@ ui <- fluidPage(
                                 tags$style(type="text/css", "#create_new_group {margin-top: 25px}")
                             ),
                             fluidRow(
-                                column(12,
-                                       uiOutput("char_details")
+                                column(3,
+                                       uiOutput("char_details_char")
+                                ),
+                                column(3,
+                                       uiOutput("char_details_english")
+                                ),
+                                column(3,
+                                       uiOutput("char_details_pinying")
+                                ),
+                                column(3,
+                                       uiOutput("char_details_note")
                                 )
                             ),
                             hr(),

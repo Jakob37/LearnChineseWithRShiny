@@ -100,6 +100,23 @@ CharacterEntry <- R6Class(
         },
         to_string = function() {
             paste(self$character, self$pinying, self$english, self$comment)
+        },
+        to_html = function() {
+            paste0(
+                "<div class='row'><div class='col'>", 
+                self$character, 
+                "</div><div class='col'>", 
+                self$pinying, 
+                "</div><div class='col'>", 
+                self$english, 
+                "</div><div class='col'>", 
+                self$comment, 
+                "</div></div>")
         }
     )
 )
+
+
+
+
+

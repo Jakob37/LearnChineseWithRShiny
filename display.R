@@ -1,13 +1,24 @@
 
-get_groups_and_characters <- function() {
+get_groups <- function() {
     
-    group_df <- loadGroups()
-    
+    group_df <- loadTableToDf("groups")
+    character_entries_table <- loadTableToDf("words")
     character_entries <- list()
-    groups <- list()
     
+    for (i in seq_len(nrow(character_entries_table))) {
+        char_row <- character_entries_table[i, ]
+        character <- char_row$mycharacter
+        english <- char_row$myenglish
+        pinying <- char_row$pinying
+        note <- char_row$note
+        
+        char_entry <- CharacterEntry$new(character, english, pinying, note)
+        character_entries[[character]] <- char_entry
+    }
+    
+    groups <- list()
     groups[["All"]] <- CharacterGroup$new("All")
-
+    
     # Next: Load the character entries from file
     # Then distribute these among the different groups
     
@@ -16,8 +27,6 @@ get_groups_and_characters <- function() {
         row <- group_df[i, ]
         group <- row$mygroup
         character <- row$mycharacter
-        char_entry <- CharacterEntry$new(character, "ping", "eng", "comm")
-        character_entries[[character]] <- char_entry
         
         if (!(group %in% names(groups))) {
             group_entry <- CharacterGroup$new(group)
@@ -25,7 +34,12 @@ get_groups_and_characters <- function() {
         }
 
         if (character != "") {
-            groups[[group]]$add_character(char_entry)
+            if (character %in% names(character_entries)) {
+                groups[[group]]$add_character(character_entries[[character]])
+            }
+            else {
+                warning("Character not available: ", character)
+            }
         }
     }
     
@@ -48,21 +62,45 @@ render <- function(session, dict, cur_ind, global_stats, character_stats,
         selectInput("char_groups", "Select word group", names(groups))
     })
     
-    session$output$char_details <- renderText({
-        
-        selected_group <- session$input$char_groups
-        if (selected_group %in% names(groups)) {
-            vapply(
-                groups[[selected_group]]$get_char_list(), 
-                function(word) {
-                    paste0("<div>", word, "</div>")
-                },
-                ""
-            )            
-        }
-        else {
-            "No words to show"
-        }
+    session$output$char_details_char <- renderText({
+        selected_group <<- session$input$char_groups
+        selected_group_entry <- groups[[selected_group]]
+        vapply(selected_group_entry$characters,
+            function(character_entry) {
+                paste0("<div>", character_entry$character, "</div>")
+            }, "")
+    })
+
+    session$output$char_details_english <- renderText({
+        selected_group <<- session$input$char_groups
+        selected_group_entry <- groups[[selected_group]]
+        vapply(selected_group_entry$characters,
+               function(character_entry) {
+                   paste0("<div>", character_entry$english, "</div>")
+               }, "")
+    })
+
+    session$output$char_details_pinying <- renderText({
+        selected_group <<- session$input$char_groups
+        selected_group_entry <- groups[[selected_group]]
+        vapply(selected_group_entry$characters,
+               function(character_entry) {
+                   paste0("<div>", character_entry$pinying, "</div>")
+               }, "")
+    })
+
+    session$output$char_details_note <- renderText({
+        selected_group <<- session$input$char_groups
+        selected_group_entry <- groups[[selected_group]]
+        vapply(selected_group_entry$characters,
+               function(character_entry) {
+                   if (character_entry$comment == "") {
+                       "-"
+                   }
+                   else {
+                       paste0("<div>", character_entry$comment, "</div>")
+                   }
+               }, "")
     })
     
     updateTextInput(session, "english", label = NULL, value = "")

@@ -77,12 +77,19 @@ saveWord <- function(characters, english, pinying, notes="", debug=FALSE) {
     }
     
     # Submit the update query and disconnect
+    dbSendQuery(db, "SET NAMES utf8");
     dbGetQuery(db, query)
     dbDisconnect(db)
 }
 
-loadGroups <- function() {
+loadTableToDf <- function(table) {
 
+    available_tables <- c("groups", "words")
+    
+    if (!(table %in% available_tables)) {
+        stop("Available tables are:", paste(available_tables, collapse=", "))
+    }
+    
     # Connect to the database
     db <- dbConnect(
         MySQL(), 
@@ -93,7 +100,7 @@ loadGroups <- function() {
         password = options()$mysql$password)
     
     # Construct the fetching query
-    query <- sprintf("SELECT * FROM %s ", category_table)
+    query <- sprintf("SELECT * FROM %s ", table)
     # Submit the fetch query and disconnect
 
     dbSendQuery(db, "SET NAMES utf8");
@@ -110,5 +117,3 @@ dbDisconnectAll <- function(){
     cat(sprintf("%s connection(s) closed.\n", ile))
 }
 
-
-loadGroups()
